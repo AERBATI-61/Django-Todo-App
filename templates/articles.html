@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-10 offset-md-3">
+            <div class="col-lg-8">
+
+                <h3>Makaleler</h3>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-3">
+            <div class="col-lg-8">
+
+                <form>
+                    {% csrf_token %}
+                    <input type="text" name="keyword" class="input-sm" maxlength="64" placeholder="Ara...">
+
+                    <button type="submit" class="btn btn-danger">Ara</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if articles %}
+        {% for article in articles %}
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-10 offset-md-3">
+                        <div class="col-lg-8">
+                            <article>
+                                <header class="mb-4">
+                                    <a href="{% url 'article:detail' article.id %}"><h2
+                                            class="fw-bolder mb-1">{{ article.title }}</h2></a>
+                                    <hr>
+                                    <p class="lead">
+                                        {{ article.author.username }} Tarafindan yayinlandi
+                                    </p>
+                                    <hr>
+                                    <div class="text-muted fst-italic mb-2">{{ article.created_date }}</div>
+                                    <hr>
+
+                                    <p class="lead">
+                                        {{ article.content|safe|truncatewords:30 }}
+                                    </p>
+                                    <a style="float: right" class="btn btn-success"
+                                       href="/articles/article/{{ article.id }}">Devamini Oku</a>
+                                    <br>
+
+                                </header>
+                                {% if article.article_image %}
+                                    <a href="{% url 'article:detail' article.id %}">
+                                        <figure class="mb-4"><img class="img-fluid rounded" src="{{ article.article_image.url }}" alt="...">
+                                        </figure>
+                                    </a><br><br>
+
+                                {% endif %}
+
+
+                            </article>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+        <div class="row">
+            <div class="col-md-10 offset-md-3">
+                <div class="col-lg-8">
+                    <div class="alert alert-danger">Makale Bulunamadi</div>
+                </div>
+            </div>
+        </div>
+
+
+    {% endif %}
+
+{% endblock %}

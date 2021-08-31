@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="jumbotron text-center">
+    <h3>Arafat</h3>
+    <p>Blog'una Hos Geldiniz</p>
+
+</div>
+
+    <hr>
+
+{#    <p>#}
+{#    {% if n >= 10 %}#}
+{#        <b>N 10 ile esit veya buyuk</b>#}
+{#    {% elif n < 10 %}#}
+{#        <b>N 10 degeridin kucuk</b>#}
+{#    {% else %}#}
+{#        <b>N sayi degil mi lan</b>#}
+{#    {% endif %}#}
+{#    </p>#}
+{##}
+{##}
+{#    <p>#}
+{#    {% if m <= 10 %}#}
+{#        <b>M 10 ile esit veya kucuk</b>#}
+{#    {% elif m >= 10 %}#}
+{#        <b>M 10 degeridin buyuk veya esit</b>#}
+{#    {% else %}#}
+{#        <b>M sayi degil mi lan</b>#}
+{#    {% endif %}#}
+{#    </p>#}
+{##}
+{#    {% for l in list %}#}
+{#        <p>{{ l }}</p>#}
+{##}
+{#    {% endfor %}#}
+
+
+    <p>
+    {% if request.user.is_authenticated %}
+        {{ request.user.username }} Kullanici ile gris yapilmis
+    {% else %}
+        Herhangi bir kullanici gris yapmamis
+    {% endif %}
+    </p>
+
+
+
+
+
+{% endblock %}

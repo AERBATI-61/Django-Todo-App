@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <article>
+                    <header class="mb-4">
+                        <h1 class="fw-bolder mb-1">{{ article.title }}</h1>
+                        <hr>
+                        <p class="lead">
+                            {{ article.author.username }} Tarafindan Yayinlandi
+                        </p>
+                        <hr>
+                        <div class="text-muted fst-italic mb-2">{{ article.created_date }}</div>
+                        <hr>
+
+                        <p class="lead">
+                            {{ article.content|safe }}
+                        </p>
+                        <hr>
+
+                    </header>
+                    {% if article.article_image %}
+                        <figure class="mb-4"><img class="img-fluid rounded"
+                                                  src="{{ article.article_image.url }}" alt="..."></figure>
+
+                    {% endif %}
+
+
+                </article>
+                <hr>
+            <h4>Yorumlar</h4>
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="media md-4">
+                        <img style="max-width: 50px; min-width: 50px" src="{% static 'assets/comment-icon.png' %}" class="d-flex mr-3 rounded-circle" alt="">
+                    <div class="media-body">
+                        <h5 class="mt-0">{{ comment.comment_author }}</h5>
+                        <p>{{ comment.comment_date }}</p>
+                        <p>{{ comment.comment_content }}</p>
+                        <hr>
+                    </div>
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                <div class="alert alert-danger">
+                    Bu makaleye herhangi bir yorum yazilmamis.
+                </div>
+
+            {% endif %}
+                <div class="card my-4">
+                    <h5 class="card-header">Yorum Ekle</h5>
+                    <div class="card-body">
+                        <form action="{% url 'article:comment' article.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">isim</label>
+                                <input name="comment_author" type="text" class="form-control" id="formGroupExampleInput"
+                                       placeholder="Isminizi Grin">
+                            </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Yorum</label>
+                                <textarea name="comment_content" class="form-control" cols="30" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Ekle</button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
