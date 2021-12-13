@@ -1,48 +1,101 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="jumbotron text-center">
-    <h3>Arafat</h3>
-    <p>Blog'una Hos Geldiniz</p>
 
-</div>
+    <div class="jumbotron text-center col-md-10 offset-md-1">
+        <h3>
+            {% if request.user.is_authenticated %}
+                {{ request.user.username }}
+            {% endif %}
+        </h3>
+        <p>Blog'una Hos Geldiniz</p>
 
-    <hr>
+    </div>
+    <div class="container mt-5">
 
-{#    <p>#}
-{#    {% if n >= 10 %}#}
-{#        <b>N 10 ile esit veya buyuk</b>#}
-{#    {% elif n < 10 %}#}
-{#        <b>N 10 degeridin kucuk</b>#}
-{#    {% else %}#}
-{#        <b>N sayi degil mi lan</b>#}
+        <div class="row">
+            <div class="col-md-10 offset-md-3">
+                <div class="col-lg-8">
+                {% include 'categories.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#    {% if n < 10 %}#}
+{#        {{ categories.name }}#}
 {#    {% endif %}#}
-{#    </p>#}
-{##}
-{##}
-{#    <p>#}
-{#    {% if m <= 10 %}#}
-{#        <b>M 10 ile esit veya kucuk</b>#}
-{#    {% elif m >= 10 %}#}
-{#        <b>M 10 degeridin buyuk veya esit</b>#}
-{#    {% else %}#}
-{#        <b>M sayi degil mi lan</b>#}
-{#    {% endif %}#}
-{#    </p>#}
-{##}
-{#    {% for l in list %}#}
-{#        <p>{{ l }}</p>#}
-{##}
-{#    {% endfor %}#}
 
 
-    <p>
-    {% if request.user.is_authenticated %}
-        {{ request.user.username }} Kullanici ile gris yapilmis
-    {% else %}
-        Herhangi bir kullanici gris yapmamis
-    {% endif %}
-    </p>
+
+
+                {% for article in makaleler %}
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-md-10 offset-md-3">
+                                <div class="col-lg-8">
+                                    <article>
+                                        <header class="mb-4">
+                                            <a href="{% url 'article:detail' article.slug %}"><h2
+                                                    class="fw-bolder mb-1">{{ article.title }}</h2></a>
+                                            <hr>
+                                            <p class="lead">
+                                                {{ article.author.username }} Tarafindan yayinlandi
+                                            </p>
+                                            <hr>
+                                            <div class="text-muted fst-italic mb-2">{{ article.created_date }}</div>
+                                            <hr>
+
+                                            <p class="lead">
+                                                {{ article.content|safe|truncatechars:100 }}
+                                            </p>
+                                            <a style="float: right" class="btn btn-success"
+                                               href="/articles/article/{{ article.slug }}">Devamini Oku</a>
+                                            <br>
+
+                                        </header>
+                                        {% if article.article_image %}
+                                            <a href="{% url 'article:detail' article.slug %}">
+                                                <figure class="mb-4"><img style="width: 600px; height: 200px"
+                                                                          class="img-fluid rounded"
+                                                                          src="{{ article.article_image.url }}"
+                                                                          alt="...">
+                                                </figure>
+                                            </a><br><br>
+
+                                        {% endif %}
+
+
+                                    </article>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                {% endfor %}
+
+
+
+
+
+
+
+
+
+
+    {#    <p>#}
+    {#        {% if request.user.is_authenticated %}#}
+    {#            {{ request.user.username }} Kullanici ile gris yapilmis#}
+    {#        {% else %}#}
+    {#            Herhangi bir kullanici gris yapmamis#}
+    {#        {% endif %}#}
+    {#    </p>#}
+
+
+
 
 
 

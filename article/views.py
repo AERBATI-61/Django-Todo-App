@@ -6,31 +6,43 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 def indexview(request):
+    makaleler = Article.objects.filter(is_active=True, is_home=True)
+    categories = Category.objects.all()
     keyword = request.GET.get("keyword")
     if keyword:
         articles = Article.objects.filter(title__contains=keyword)
         context = {
+
             'articles': articles,
             'keyword': keyword
         }
         return render(request, 'articles.html', context)
 
-    return render(request, 'index.html')
+    context = {
+        'makaleler': makaleler,
+        'categories': categories,
+        "n": categories.count()
+    }
 
-    # context = {
-    #     'n': 10,
-    #     'm': 20,
-    #     'list': [1,2,3,4,5,6,7]
-    # }
-    # return render(request, 'index.html', context)
+
+
+    return render(request, 'index.html', context)
+
 
 def articlesview(request):
     keyword = request.GET.get("keyword")
     if keyword:
         articles = Article.objects.filter(title__contains=keyword)
         return render(request, 'articles.html', {"articles": articles})
-    articles = Article.objects.all()
-    return render(request, 'articles.html', {"articles":articles})
+    articles = Article.objects.filter(is_active=True)
+    categories = Category.objects.all()
+    context = {
+        "articles": articles,
+        "categories": categories,
+
+
+    }
+    return render(request, 'articles.html', context)
 
 
 
@@ -61,9 +73,10 @@ def addarticleview(request):
 
     return  render(request, 'addarticle.html', {"form": form})
 
-def detailview(request, id):
+def detailview(request, slug):
     # article = Article.objects.filter(id = id).first()
-    article = get_object_or_404(Article, id = id)
+    # article = get_object_or_404(Article, id = slug)
+    article = Article.objects.get(slug=slug)
     comments = article.comments.all()[:3]
     return render(request, 'detail.html', {"article": article, "comments": comments})
 
@@ -99,3 +112,6 @@ def addComment(request, id):
         newComment.article = article
         newComment.save()
         return redirect(reverse('article:detail', kwargs={'id':id}))
+
+def category(request, slug):
+    pass
