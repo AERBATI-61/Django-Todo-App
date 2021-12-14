@@ -1,6 +1,16 @@
 <div class="list-group">
     {% for category in categories %}
-        <a href="{% url 'article:category' category.slug %}" class="list-group-item list-group-item-action">{{ category.name|title }}</a>
+        {% if category.slug == selected_category %}
+            <a href="{% url 'article:category' category.slug %}"
+               class="list-group-item list-group-item-action active"
+               style="background-color: #ababab; color: white">{{ category.name|title }}</a>
+        {% else %}
+            <a href="{% url 'article:category' category.slug %}"
+               class="list-group-item list-group-item-action"
+               style="background-color: #3b3b1f; color: white">{{ category.name|title }}</a>
+        {% endif %}
+
+
     {% endfor %}
 
 </div>

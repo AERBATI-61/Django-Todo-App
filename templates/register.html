@@ -1,11 +1,10 @@
 {% extends 'layout.html' %}
 {% block body %}
-{% load crispy_forms_tags %}
+    {% load crispy_forms_tags %}
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h2>Kayit Ol</h2>
             <hr>
-
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
@@ -16,8 +15,6 @@
 
         </div>
     </div>
-
-
-
-
 {% endblock %}
+
+

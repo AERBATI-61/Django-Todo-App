@@ -2,6 +2,18 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from django.utils.text import slugify
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=128)
+    slug = models.SlugField(null=False, blank=True, unique=True, db_index=True, editable=False)
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
 class Article(models.Model):
     author = models.ForeignKey("auth.User", on_delete=models.CASCADE, verbose_name="Yazar")
     title = models.CharField(max_length=50, verbose_name="Baslik")
@@ -11,6 +23,8 @@ class Article(models.Model):
     is_home = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     slug = models.SlugField(null=False, blank=True, unique=True, db_index=True, editable=False)
+    # category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category, blank=True)
     def __str__(self):
         return self.title
 
@@ -34,12 +48,4 @@ class Comment(models.Model):
         ordering = ["-comment_date"]
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=128)
-    slug = models.SlugField(null=False, blank=True, unique=True, db_index=True, editable=False)
-    def __str__(self):
-        return self.name
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super().save(*args, **kwargs)

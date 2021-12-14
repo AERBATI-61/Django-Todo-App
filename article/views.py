@@ -34,13 +34,12 @@ def articlesview(request):
     if keyword:
         articles = Article.objects.filter(title__contains=keyword)
         return render(request, 'articles.html', {"articles": articles})
+
     articles = Article.objects.filter(is_active=True)
     categories = Category.objects.all()
     context = {
         "articles": articles,
         "categories": categories,
-
-
     }
     return render(request, 'articles.html', context)
 
@@ -114,4 +113,10 @@ def addComment(request, id):
         return redirect(reverse('article:detail', kwargs={'id':id}))
 
 def category(request, slug):
-    pass
+    context = {
+        # "articles": Article.objects.filter(is_active=True, category__slug=slug),
+        "articles": Category.objects.get(slug=slug).article_set.filter(is_active=True),
+        "categories": Category.objects.all(),
+        "selected_category": slug
+    }
+    return render(request, 'articles.html', context)
